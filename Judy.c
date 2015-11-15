@@ -29,6 +29,7 @@ int main (int argc, char *argv[]) {
 
 	struct returnStatus *status;
 	struct param par; 
+	par->userId = 1;
 
 	if (client == NULL) {
 		if ((client = clnt_create(server, MESSAGE_BOARD, MESSAGE_BOARD_VERSION, "udp")) == NULL) {
