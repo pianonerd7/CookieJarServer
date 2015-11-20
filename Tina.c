@@ -5,14 +5,25 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <string.h>
-#include "Cookie.x"
+#include "cookie.h"
 
 const unsigned int RAND_RANGE = 5;
 char *server;
 CLIENT *client;
+time_t t;
 
 int getRand() {
 	return ((rand() % RAND_RANGE));
+}
+
+void displayRequestStatus(int num) {
+	switch(num) {
+		case -2: printf("[Tina] The cookie jar is empty. \n");
+
+		case 1: printf("[Tina] Got a cookie! \n");
+
+		default: printf("[Tina] Unknown... try again. \n");
+	}
 }
 
 int main (int argc, char *argv[]) {
@@ -29,7 +40,7 @@ int main (int argc, char *argv[]) {
 
 	struct returnStatus *status;
 	struct param par; 
-	par->userId = 0;
+	par.userId = 0;
 
 	if (client == NULL) {
 		if ((client = clnt_create(server, MESSAGE_BOARD, MESSAGE_BOARD_VERSION, "udp")) == NULL) {
@@ -41,7 +52,7 @@ int main (int argc, char *argv[]) {
 	while (status->cookieStatus != -2) {
 		sleep(getRand());
 
-		if ((status=getMeMyCookie(&par, client)) == NULL) {
+		if ((status=getmemycookie(&par, client)) == NULL) {
 			clnt_perror(client, server);
 			clnt_destroy(client);
 			exit(1);
@@ -49,13 +60,4 @@ int main (int argc, char *argv[]) {
 
 		displayRequestStatus(status->cookieStatus);
 	}
-}
-
-void displayRequestStatus(int num) {
-	switch(num) {
-		case -2: printf("[Tina] The cookie jar is empty. \n");
-
-		case 1: printf("[Tina] Got a cookie! \n");
-
-		default: printf("[Tina] Unknown... try again. \n");
 }
