@@ -15,20 +15,23 @@ struct returnStatus* getmemycookie_1_svc(struct param* par, struct svc_req * req
 
 	status.cookieStatus = -2;
 	if (cookies < 1) {
-		return -2;
+		return status;
 	}
 
 	//1 is judy
 	if (par->userId == 1) {
 		if (NumOfTinaCookie < 2) {
-			return -1;
+			status.cookieStatus = -1;
+			return status;
 		}
 		cookies--;
-		return 1;
+		status.cookieStatus = 1;
+		return status;
 	}
 	//0 is tina
 	else if (par->userId == 0) {
 		cookies--;
-		return 1;
+		status.cookieStatus = 1;
+		return status;
 	}
 }
