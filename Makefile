@@ -1,21 +1,26 @@
-CC = clang
+C = clang
 # -g : allows use of GNU Debugger
 # -Wall : show all warnings
-CFLAGS = -g -Wall
+CFLAGS = -g -Wall -Wno-unused-variable
 LIBS = # None yet...
-CSOURCE = Judy.c Tina.c Cookie_clnt.c Cookie_xdr.c
+CSOURCE1 = Judy.c Cookie_clnt.c Cookie_xdr.c
+CSOURCE2 = Tina.c Cookie_clnt.c Cookie_xdr.c
 SSOURCE = Mother.c Cookie_svc.c Cookie_xdr.c
 RPCSRC = Cookie.x
 RPCGEN = Cookie.h Cookie_clnt.c Cookie_svc.c Cookie_xdr.c
-CLIENT = Judy Tina
+CLIENT1 = Judy
+CLIENT2 = Tina
 SERVER = Mother
 
-all: $(CLIENT) $(SERVER)
+all: $(CLIENT1) $(CLIENT2) $(SERVER)
 
-eater: $(CSOURCE) $(RPCGEN)
-	$(CC) $(LIBS) $(CFLAGS) -o $(CLIENT) $(CSOURCE)
+$(CLIENT1): $(CSOURCE1) $(RPCGEN)
+	$(CC) $(LIBS) $(CFLAGS) -o $(CLIENT1) $(CSOURCE1)
 
-agent: $(SSOURCE) $(RPCGEN)
+$(CLIENT2): $(CSOURCE2) $(RPCGEN)
+	$(CC) $(LIBS) $(CFLAGS) -o $(CLIENT2) $(CSOURCE2)
+
+$(SERVER): $(SSOURCE) $(RPCGEN)
 	$(CC) $(LIBS) $(CFLAGS) -o $(SERVER) $(SSOURCE)
 
 $(RPCGEN): $(RPCSRC)
@@ -29,4 +34,4 @@ $(RPCGEN): $(RPCSRC)
 clean:
 	@# Using the '@' sign suppresses echoing
 	@# the line while the command is run
-	rm -f $(CLIENT) $(SERVER) $(RPCGEN)
+	rm -f $(CLIENT1) $(CLIENT2) $(SERVER) $(RPCGEN)
