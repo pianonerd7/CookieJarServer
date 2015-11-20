@@ -5,14 +5,27 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <string.h>
-#include "Cookie.x"
+#include "cookie.h"
 
 const unsigned int RAND_RANGE = 5;
 char *server;
 CLIENT *client;
+time_t t;
 
 int getRand() {
 	return ((rand() % RAND_RANGE));
+}
+
+void displayRequestStatus(int num) {
+	switch(num) {
+		case -2: printf("[Judy] The cookie jar is empty. \n");
+
+		case -1: printf("[Judy] Sorry Judy, you can't get a cookie at this time. \n");
+
+		case 1: printf("[Judy] Got a cookie! \n");
+
+		default: printf("[Judy] Unknown... try again. \n");
+	}
 }
 
 int main (int argc, char *argv[]) {
@@ -29,7 +42,7 @@ int main (int argc, char *argv[]) {
 
 	struct returnStatus *status;
 	struct param par; 
-	par->userId = 1;
+	par.userId = 1;
 
 	if (client == NULL) {
 		if ((client = clnt_create(server, MESSAGE_BOARD, MESSAGE_BOARD_VERSION, "udp")) == NULL) {
@@ -41,24 +54,12 @@ int main (int argc, char *argv[]) {
 	while (status->cookieStatus != -2) {
 		sleep(getRand());
 
-		if ((status=getMeMyCookie(&par, client)) == NULL) {
+		if ((status=getmemycookie(&par, client)) == NULL) {
 			clnt_perror(client, server);
 			clnt_destroy(client);
 			exit(1);
 		}
 
-		displayRequestStatus(status->cookieStatus);
-	}
-}
-
-void displayRequestStatus(int num) {
-	switch(num) {
-		case -2: printf("[Judy] The cookie jar is empty. \n");
-
-		case -1: printf("[Judy] Sorry Judy, you can't get a cookie at this time. \n");
-
-		case 1: printf("[Judy] Got a cookie! \n");
-
-		default: printf("[Judy] Unknown... try again. \n");
+		displayRequestStatus(&status->cookieStatus);
 	}
 }
