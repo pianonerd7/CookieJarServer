@@ -1,22 +1,25 @@
-#include <time.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include "Cookie.x"
+#include "cookie.h"
 
 #define MAX_COOKIES 20
 
 int NumOfTinaCookie = 0;
 int cookies = MAX_COOKIES;
 
-int getCookie(int userID) {
+struct returnStatus* getmemycookie_1_svc(struct param* par, struct svc_req * req) {
 
+	static struct returnStatus status;
+	int i;
+
+	status.cookieStatus = -2;
 	if (cookies < 1) {
-		return -2
+		return -2;
 	}
 
 	//1 is judy
-	if (useID == 1) {
+	if (par->userId == 1) {
 		if (NumOfTinaCookie < 2) {
 			return -1;
 		}
@@ -24,7 +27,7 @@ int getCookie(int userID) {
 		return 1;
 	}
 	//0 is tina
-	else if (userID == 0) {
+	else if (par->userId == 0) {
 		cookies--;
 		return 1;
 	}
