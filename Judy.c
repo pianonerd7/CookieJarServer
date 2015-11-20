@@ -54,12 +54,12 @@ int main (int argc, char *argv[]) {
 	while (status->cookieStatus != -2) {
 		sleep(getRand());
 
-		if ((status=getmemycookie(&par, client)) == NULL) {
+		if ((status=getmemycookie_1(&par, client)) == NULL) {
 			clnt_perror(client, server);
 			clnt_destroy(client);
 			exit(1);
 		}
 
-		displayRequestStatus(&status->cookieStatus);
+		displayRequestStatus(status->cookieStatus);
 	}
 }
