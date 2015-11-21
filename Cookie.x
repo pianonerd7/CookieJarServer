@@ -18,4 +18,4 @@ program MESSAGE_BOARD
   {
     struct returnStatus GETMEMYCOOKIE(param) = 1;
   } = 1;
-} = 0x2defaced;
+} = 0x83526175;

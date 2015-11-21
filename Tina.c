@@ -5,7 +5,7 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <string.h>
-#include "cookie.h"
+#include "Cookie.h"
 
 const unsigned int RAND_RANGE = 5;
 char *server;
@@ -21,8 +21,6 @@ void displayRequestStatus(int num) {
 		case -2: printf("[Tina] The cookie jar is empty. \n");
 
 		case 1: printf("[Tina] Got a cookie! \n");
-
-		default: printf("[Tina] Unknown... try again. \n");
 	}
 }
 
